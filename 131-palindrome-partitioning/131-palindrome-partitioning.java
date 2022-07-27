@@ -1,40 +1,30 @@
 class Solution {
-  public List<List<String>> partition(String s) {
-    List<List<String>> decompositions = new ArrayList();
-
-    decomposeString(0, s, new ArrayList<>(), decompositions);
-
-    return decompositions;
-  }
-  private void decomposeString(
-    int workingIndex,
-    String s,
-    List<String> partialDecomposition,
-    List<List<String>> decompositions
-  ) {
-    if (workingIndex == s.length()) {
-      decompositions.add(new ArrayList<>(partialDecomposition));
-      return;
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans=new ArrayList<>();
+        List<String> res=new ArrayList<>();
+        helper(0,s,ans,res);
+        return ans;
     }
-    for (int i = workingIndex; i < s.length(); i++) {
-      if (isPalindrome(workingIndex, i, s)) {
-        String palindromicSnippet = s.substring(workingIndex, i + 1);
-        partialDecomposition.add(palindromicSnippet);
-        decomposeString(i + 1, s, partialDecomposition, decompositions);
-        partialDecomposition.remove(partialDecomposition.size() - 1);
-      }
+    
+    public static void helper(int idx,String s,List<List<String>> ans,List<String> res){
+        if(idx>=s.length()){
+            ans.add(new ArrayList<>(res));
+            return;
+        }
+        for(int i=idx;i<s.length();i++){
+            if(isPalindrome(s,idx,i)){
+                res.add(s.substring(idx,i+1));
+                helper(i+1,s,ans,res);
+                res.remove(res.size()-1);
+            }
+        }
     }
-  }
-  private boolean isPalindrome(int left, int right, String s) {
-    while (left < right) {
-      if (s.charAt(left) != s.charAt(right)) {
-        return false;
-      }
-
-      left++;
-      right--;
+    public static boolean isPalindrome(String s,int start,int end){
+        while(start<=end){
+            if(s.charAt(start++)!=s.charAt(end--)){
+                return false;
+            }
+        }
+        return true;
     }
-
-    return true;
-  }
 }
