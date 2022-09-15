@@ -1,18 +1,16 @@
 class Solution {
     public int rob(int[] nums) {
-        int n=nums.length;
-        int prev=nums[0];
-        int prev2=0;
-        for(int i=1;i<n;i++){
-            int pick=nums[i];
-            if(i>1){
-                pick+=prev2;
-            }
-            int notPick=0+prev;
-            int curr=Math.max(pick,notPick);
-            prev2=prev;
-            prev=curr;
+        return maxMoney(nums,0,new HashMap<>());
+    }
+    private int maxMoney(int[]nums,int x,HashMap<Integer,Integer> map){
+        if(x>=nums.length){
+            return 0;
         }
-        return prev;
+        if(map.containsKey(x)){
+            return map.get(x);
+        }
+        int ans=Math.max(nums[x]+maxMoney(nums,x+2,map),maxMoney(nums,x+1,map));
+        map.put(x,ans);
+        return ans;
     }
 }
